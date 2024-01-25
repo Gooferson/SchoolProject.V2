@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SchoolProject.Server.Data;
-using SchoolProject.Server.data.IRepository;
+using SchoolProject.Server.IRepository;
 using SchoolProject.Shared.Domain;
-using SchoolProject.Server.Data.IRepository;
+using SchoolProject.Server.Data;
+using SchoolProject.Server.IRepository;
+using SchoolProject.Shared.Domain;
 
 namespace SchoolProject.Server.Controllers
 {
@@ -16,25 +17,13 @@ namespace SchoolProject.Server.Controllers
     [ApiController]
     public class CpusController : ControllerBase
     {
-        //private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
-
         public CpusController(IUnitOfWork unitOfWork)
         {
-            //_context = context;
             _unitOfWork = unitOfWork;
         }
-
         // GET: api/Cpus
         [HttpGet]
-/*        public async Task<ActionResult<IEnumerable<Cpu>>> GetCpus()
-        {
-          if (_context.Cpus == null)
-          {
-              return NotFound();
-          }
-            return await _context.Cpus.ToListAsync();
-        }*/
         public async Task<IActionResult> GetCpus()
         {
             var cpus = await _unitOfWork.Cpus.GetAll();
@@ -43,10 +32,9 @@ namespace SchoolProject.Server.Controllers
 
         // GET: api/Cpus/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cpu>> GetCpu(int id)
+        public async Task<IActionResult> GetCpu(int Id)
         {
-            var cpu = await _unitOfWork.Cpus.Get(q => q.Id == id);
-
+            var cpu = await _unitOfWork.Cpus.Get(q => q.Id == Id);
             if (cpu == null)
             {
                 return NotFound();
@@ -68,18 +56,15 @@ namespace SchoolProject.Server.Controllers
             _unitOfWork.Cpus.Update(cpu);
 
             try
-            {   
+            {
                 await _unitOfWork.Save(HttpContext);
             }
+
             catch (DbUpdateConcurrencyException)
             {
                 if (!await CpuExists(id))
                 {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
                 }
             }
 
@@ -93,6 +78,7 @@ namespace SchoolProject.Server.Controllers
         {
             await _unitOfWork.Cpus.Insert(cpu);
             await _unitOfWork.Save(HttpContext);
+
             return CreatedAtAction("GetCpu", new { id = cpu.Id }, cpu);
         }
 
@@ -100,25 +86,19 @@ namespace SchoolProject.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCpu(int id)
         {
-            var cpu = await _unitOfWork.Cpus.Get(q=>q.Id == id);
-            if (cpu == null) 
-            { 
+            var cpu = await _unitOfWork.Cpus.Get(q => q.Id == id);
+            if (cpu == null)
+            {
                 return NotFound();
             }
-
-            await _unitOfWork.Cpus.Delete(id);
-            await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }
 
-
         private async Task<bool> CpuExists(int id)
         {
-            var make = await _unitOfWork.Cpus.Get(q => q.Id == id);
-            return make != null;
-
-            //return (_context.Makes?.Any(e => e.Id == id)).GetValueOrDefault();
+            var cpu = await _unitOfWork.Cpus.Get(q => q.Id == id);
+            return cpu != null;
         }
     }
 }

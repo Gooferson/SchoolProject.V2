@@ -6,46 +6,46 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Server.Data;
-using SchoolProject.Server.data.IRepository;
+using SchoolProject.Server.IRepository;
 using SchoolProject.Shared.Domain;
-using SchoolProject.Server.Data.IRepository;
+using SchoolProject.Server.Repository;
 
 namespace SchoolProject.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewsController : ControllerBase
+    public class ReviewController : ControllerBase
     {
         //private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ReviewsController(IUnitOfWork unitOfWork)
+        public ReviewController(IUnitOfWork unitOfWork)
         {
             //_context = context;
             _unitOfWork = unitOfWork;
         }
 
-        // GET: api/Reviews
+        // GET: api/Review
         [HttpGet]
-/*        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+/*        public async Task<ActionResult<IEnumerable<Review>>> GetReview()
         {
-          if (_context.Reviews == null)
+          if (_context.Review == null)
           {
               return NotFound();
           }
-            return await _context.Reviews.ToListAsync();
+            return await _context.Review.ToListAsync();
         }*/
-        public async Task<IActionResult> GetReviews()
+        public async Task<IActionResult> GetReview()
         {
-            var Reviews = await _unitOfWork.Reviews.GetAll();
-            return Ok(Reviews);
+            var Review = await _unitOfWork.Review.GetAll();
+            return Ok(Review);
         }
 
-        // GET: api/Reviews/5
+        // GET: api/Review/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        public async Task<ActionResult<Reviews>> GetReview(int id)
         {
-            var Review = await _unitOfWork.Reviews.Get(q => q.Id == id);
+            var Review = await _unitOfWork.Review.Get(q => q.Id == id);
 
             if (Review == null)
             {
@@ -55,17 +55,17 @@ namespace SchoolProject.Server.Controllers
             return Ok(Review);
         }
 
-        // PUT: api/Reviews/5
+        // PUT: api/Review/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, Review Review)
+        public async Task<IActionResult> PutReview(int id, Reviews Review)
         {
             if (id != Review.Id)
             {
                 return BadRequest();
             }
 
-            _unitOfWork.Reviews.Update(Review);
+            _unitOfWork.Review.Update(Review);
 
             try
             {   
@@ -86,27 +86,27 @@ namespace SchoolProject.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Reviews
+        // POST: api/Review
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Review>> PostReview(Review Review)
+        public async Task<ActionResult<Reviews>> PostReview(Reviews Review)
         {
-            await _unitOfWork.Reviews.Insert(Review);
+            await _unitOfWork.Review.Insert(Review);
             await _unitOfWork.Save(HttpContext);
             return CreatedAtAction("GetReview", new { id = Review.Id }, Review);
         }
 
-        // DELETE: api/Reviews/5
+        // DELETE: api/Review/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var Review = await _unitOfWork.Reviews.Get(q=>q.Id == id);
+            var Review = await _unitOfWork.Review.Get(q=>q.Id == id);
             if (Review == null) 
             { 
                 return NotFound();
             }
 
-            await _unitOfWork.Reviews.Delete(id);
+            await _unitOfWork.Review.Delete(id);
             await _unitOfWork.Save(HttpContext);
 
             return NoContent();
@@ -115,7 +115,7 @@ namespace SchoolProject.Server.Controllers
 
         private async Task<bool> ReviewExists(int id)
         {
-            var make = await _unitOfWork.Reviews.Get(q => q.Id == id);
+            var make = await _unitOfWork.Review.Get(q => q.Id == id);
             return make != null;
 
             //return (_context.Makes?.Any(e => e.Id == id)).GetValueOrDefault();

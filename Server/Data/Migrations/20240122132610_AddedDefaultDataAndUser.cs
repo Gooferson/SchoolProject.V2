@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolProject.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class ProjectDB : Migration
+    public partial class AddedDefaultDataAndUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -523,8 +523,8 @@ namespace SchoolProject.Server.Migrations
                 columns: new[] { "Id", "CpuBrand", "CpuCores", "CpuSpeed", "CpuVersion", "CreatedBy", "DateCreated", "DateUpdated", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "AMD", 10, "14098Hz", "System", null, new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5704), new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5716), null },
-                    { 2, "Intel", 10, "14098Hz", "System", null, new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5721), new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5722), null }
+                    { 1, "AMD", 10, "14098Hz", "System", null, new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6406), new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6424), null },
+                    { 2, "Intel", 10, "14098Hz", "System", null, new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6432), new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6433), null }
                 });
 
             migrationBuilder.CreateIndex(

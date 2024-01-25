@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Server.Data;
-using SchoolProject.Server.data.IRepository;
+using SchoolProject.Server.IRepository;
 using SchoolProject.Shared.Domain;
-using SchoolProject.Server.Data.IRepository;
+using SchoolProject.Server.Repository;
 
 namespace SchoolProject.Server.Controllers
 {

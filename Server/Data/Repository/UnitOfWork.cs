@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using SchoolProject.Server.Data;
+using SchoolProject.Server.IRepository;
+using SchoolProject.Server.Models;
+using SchoolProject .Shared.Domain;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SchoolProject.Server.data.IRepository;
-using SchoolProject.Server.Data.IRepository;
-using SchoolProject.Server.Data;
-using SchoolProject.Server.Models;
-using SchoolProject.Shared.Domain;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace CarRentalManagement.Server.Repository
+namespace SchoolProject.Server.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -53,17 +51,17 @@ namespace CarRentalManagement.Server.Repository
         public IGenericRepository<OS> OSs
             => _oss ??= new GenericRepository<OS>(_context);
         public IGenericRepository<Payment> Payments
-        => _payments ??= new GenericRepository<Payment>(_context);
+            => _payments ??= new GenericRepository<Payment>(_context);
         public IGenericRepository<Ram> Rams
-        => _rams ??= new GenericRepository<Ram>(_context);
+            => _rams ??= new GenericRepository<Ram>(_context);
         public IGenericRepository<Reviews> Review
-        => _review ??= new GenericRepository<Reviews>(_context);
+            => _review ??= new GenericRepository<Reviews>(_context);
         public IGenericRepository<Screen> Screens
-        => _screens ??= new GenericRepository<Screen>(_context);
+            => _screens ??= new GenericRepository<Screen>(_context);
         public IGenericRepository<User> Users
-        => _users ??= new GenericRepository<User>(_context);
+            => _users ??= new GenericRepository<User>(_context);
         public IGenericRepository<Wifi> Wifis
-        => _wifis ??= new GenericRepository<Wifi>(_context);
+            => _wifis ??= new GenericRepository<Wifi>(_context);
 
 
         public void Dispose()

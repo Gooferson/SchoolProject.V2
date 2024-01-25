@@ -1,15 +1,14 @@
-﻿
+﻿using SchoolProject.Server.Data;
+using SchoolProject.Server.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using SchoolProject.Server.data.IRepository;
-using SchoolProject.Server.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CarRentalManagement.Server.Repository
+namespace SchoolProject.Server.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

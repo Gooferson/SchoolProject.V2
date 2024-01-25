@@ -1,7 +1,11 @@
-﻿using SchoolProject.Server.data.IRepository;
-using SchoolProject.Shared.Domain;
+﻿using SchoolProject.Shared.Domain;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SchoolProject.Server.Data.IRepository
+namespace SchoolProject.Server.IRepository
 {
     public interface IUnitOfWork : IDisposable
     {

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolProject.Server", "Server\SchoolProject.Server.csproj", "{41A02584-6A6C-4C43-ABC9-7D6C1B95B33A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolProject.Server", "Server\SchoolProject.Server.csproj", "{41A02584-6A6C-4C43-ABC9-7D6C1B95B33A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolProject.Client", "Client\SchoolProject.Client.csproj", "{499DAD22-D3D6-447F-A7DD-716D011CAC2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolProject.Client", "Client\SchoolProject.Client.csproj", "{499DAD22-D3D6-447F-A7DD-716D011CAC2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolProject.Shared", "Shared\SchoolProject.Shared.csproj", "{B5369BEF-2CBB-4FEA-B221-286888749D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolProject.Shared", "Shared\SchoolProject.Shared.csproj", "{B5369BEF-2CBB-4FEA-B221-286888749D39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

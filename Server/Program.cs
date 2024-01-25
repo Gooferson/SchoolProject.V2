@@ -1,11 +1,11 @@
+using SchoolProject.Server.Data;
+using SchoolProject.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using SchoolProject.Server.Data;
-using SchoolProject.Server.Models;
 using Microsoft.AspNetCore.Identity;
-using SchoolProject.Server.Data.IRepository;
-using CarRentalManagement.Server.Repository;
+using SchoolProject.Server.IRepository;
+using SchoolProject.Server.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 

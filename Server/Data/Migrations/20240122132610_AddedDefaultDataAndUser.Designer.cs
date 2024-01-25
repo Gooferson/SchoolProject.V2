@@ -12,8 +12,8 @@ using SchoolProject.Server.Data;
 namespace SchoolProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240117014737_ProjectDB")]
-    partial class ProjectDB
+    [Migration("20240122132610_AddedDefaultDataAndUser")]
+    partial class AddedDefaultDataAndUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -486,8 +486,8 @@ namespace SchoolProject.Server.Migrations
                             CpuCores = 10,
                             CpuSpeed = "14098Hz",
                             CpuVersion = "System",
-                            DateCreated = new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5704),
-                            DateUpdated = new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5716)
+                            DateCreated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6406),
+                            DateUpdated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6424)
                         },
                         new
                         {
@@ -496,8 +496,8 @@ namespace SchoolProject.Server.Migrations
                             CpuCores = 10,
                             CpuSpeed = "14098Hz",
                             CpuVersion = "System",
-                            DateCreated = new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5721),
-                            DateUpdated = new DateTime(2024, 1, 17, 9, 47, 37, 869, DateTimeKind.Local).AddTicks(5722)
+                            DateCreated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6432),
+                            DateUpdated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6433)
                         });
                 });
 
