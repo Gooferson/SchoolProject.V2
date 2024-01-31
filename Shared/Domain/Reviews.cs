@@ -8,6 +8,7 @@ namespace SchoolProject.Shared.Domain
 {
     public class Reviews : BaseDomainModel
     {
+        public string? RevTittle { get; set; }
         public string? RevContent { get; set; }
         public string? RevRating { get; set; }
         public virtual User? User { get; set; }

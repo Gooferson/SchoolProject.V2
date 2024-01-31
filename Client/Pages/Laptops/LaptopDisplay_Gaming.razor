@@ -1,0 +1,68 @@
+﻿@page "/laptop/gaming/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<PageTitle>Laptop</PageTitle>
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: antiquewhite;
+            Color: brown;
+        }
+
+        th, td {
+            width: 150px;
+            text-align: center;
+            border: 1px solid black;
+            padding: 5px
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Laptop Name</th>
+            <th>Laptop Category</th>
+            <th>Laptop Price</th>
+            <th>Cpu Name</th>
+            <th>Gpu Name</th>
+            <th>OS Name</th>
+            <th>Ram Name</th>
+            <th>Screen Name</th>
+            <th>Wifi Name</th>
+        </tr>
+        @foreach (var laptop in Laptops)
+        {
+            if (laptop.LaptopCategory == "Gaming")
+            {
+                <tr>
+                    <th>@laptop.LaptopName</th>
+                    <th>@laptop.LaptopCategory</th>
+                    <th>@laptop.LaptopPrice</th>
+                    <th>@laptop.Cpu.CpuBrand</th>
+                    <th>@laptop.Gpu.GpuBrand</th>
+                    <th>@laptop.OS.OsType</th>
+                    <th>@laptop.Ram.RamBrand</th>
+                    <th>@laptop.Screen.ScreenBrand</th>
+                    <th>@laptop.Wifi.WifiName</th>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+@code{
+    private List<Laptop>? Laptops; 
+
+    protected async override Task OnInitializedAsync()
+    {
+        Laptops = await _client.GetFromJsonAsync<List<Laptop>>($"{Endpoints.LaptopsEndpoint}");
+    }
+}

@@ -1,0 +1,84 @@
+﻿@page "/cpus/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select Cpus</h3>
+<hr />
+<br />
+
+<EditForm Model="@cpu" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Cpu 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedCpuBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (Cpus != null)
+                {
+                    foreach (var cpu in Cpus)
+                    {
+                        <option value="@cpu.CpuBrand">@cpu.CpuBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => cpu.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Cpu 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedCpuBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (Cpus != null)
+                {
+                    foreach (var cpu in Cpus)
+                    {
+                        <option value="@cpu.CpuBrand">@cpu.CpuBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => cpu.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    Cpu cpu = new Cpu();
+
+    // Separate properties for each dropdown
+    private string selectedCpuBrand1 = "";
+    private string selectedCpuBrand2 = "";
+
+    private IList<Cpu>? Cpus;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Cpus = await _client.GetFromJsonAsync<List<Cpu>>($"{Endpoints.CpusEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/cpus/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedCpuBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedCpuBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedCpuBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedCpuBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedCpuBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedCpuBrand2);
+    }
+}

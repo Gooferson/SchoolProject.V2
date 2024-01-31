@@ -1,0 +1,24 @@
+﻿@page "/wifis/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Wifi</h3>
+
+<Wifis_FormComponent ButtonText="Update" OnValidSubmit="EditGpu" wifi = "wifi"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    Wifi wifi= new Wifi();
+
+    protected async override Task OnInitializedAsync()
+    {
+        wifi = await _client.GetFromJsonAsync<Wifi>($"{Endpoints.WifisEndpoint}/{id}");
+    }
+
+    async Task EditGpu()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.WifisEndpoint}/{id}", wifi);
+        _navManager.NavigateTo("/wifis/");
+    }
+
+}

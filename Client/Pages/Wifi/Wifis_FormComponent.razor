@@ -1,0 +1,38 @@
+﻿<EditForm Model="@wifi" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Wifi Brand: </label>
+        <div>
+            <InputText @bind-Value="@wifi.WifiBrand" class="form-control" />
+            <ValidationMessage For="@(() => wifi.WifiBrand)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Wifi Type: </label>
+        <div>
+            <InputText @bind-Value="@wifi.WifiType" class="form-control" />
+            <ValidationMessage For="@(() => wifi.WifiType)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Wifi Name: </label>
+        <div>
+            <InputText @bind-Value="@wifi.WifiName" class="form-control" />
+            <ValidationMessage For="@(() => wifi.WifiName)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+@code {
+    [Parameter] public Wifi? wifi{ get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

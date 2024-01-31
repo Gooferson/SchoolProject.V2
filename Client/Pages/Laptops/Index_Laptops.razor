@@ -1,0 +1,81 @@
+﻿@page "/laptops/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<h1>Create Laptop</h1>
+
+<a href="/laptops/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Laptop
+</a>
+<br />
+<br />
+
+<a href="/laptops/comparisons" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Compare Laptops
+</a>
+<br />
+<br />
+
+@if (Laptops == null)
+{
+    <div class="alert alert-info">Loading Laptops...</div>
+}
+
+else
+{
+    <table class="table table-responsive">
+        <thread>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thread>
+        <tbody>
+            @foreach (var laptop in Laptops)
+            {
+                <tr>
+                    <td>@laptop.LaptopName</td>
+
+                    <td>
+                        <a href="/laptops/view/@laptop.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+                        <a href="/laptops/edit/@laptop.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(laptop.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private List<Laptop>? Laptops;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Laptops = await _client.GetFromJsonAsync<List<Laptop>>($"{Endpoints.LaptopsEndpoint}");
+    }
+
+    async Task Delete(int LaptopId)    
+    {
+        if (Laptops != null)
+        {
+            var Laptop = Laptops.First(q => q.Id == LaptopId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Laptop.LaptopName}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.LaptopsEndpoint}/{LaptopId}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+}

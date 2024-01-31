@@ -1,0 +1,168 @@
+﻿@page "/gpus/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Gpu Version</th>
+            <th>Gpu Vram</th>
+            <th>Gpu Brand</th>
+            <th>Gpu Speed</th>
+        </tr>
+        <tr>
+            @foreach (var gpu in Gpus)
+            {
+                if (gpu.GpuVersion == @StoredData1)
+                {
+                    <th>@gpu.GpuVersion</th>
+                    <th>@gpu.GpuVram</th>
+                    <th>@gpu.GpuBrand</th>
+                    <th>@gpu.GpuSpeed</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var gpu in Gpus)
+            {
+                if (gpu.GpuVersion == @StoredData2)
+                {
+                    <th>@gpu.GpuVersion</th>
+                    <th>@gpu.GpuVram</th>
+                    <th>@gpu.GpuBrand</th>
+                    <th>@gpu.GpuSpeed</th>
+                }
+            }
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Gpu Speed</th>
+            <th>Gpu Vram</th>
+        </tr>
+        <tr>
+            @for (int x = 0; x < StoredTestList.Count(); x++)
+            {
+                if (StoredTestList.Skip(x).FirstOrDefault() == null)
+                {
+                    <th>Equal</th>
+                }
+                else
+                {
+                    foreach (var screen in Gpus)
+                    {
+                        if (screen.GpuVersion == StoredTestList.Skip(x).FirstOrDefault())
+                        {
+                            <th>@screen.GpuVersion</th>
+                        }
+                    }
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    Gpu gpu = new Gpu();
+    private List<Gpu>? Gpus;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+    private List<int?> StoredDataList = new List<int?>();
+    private List<string?> StoredSavedDataList = new List<string?>();
+    private List<string?> StoredTestList = new List<string?>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Gpus = await _client.GetFromJsonAsync<List<Gpu>>($"{Endpoints.GpusEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+        StoredSavedDataList.Add(StoredData1);
+        StoredSavedDataList.Add(StoredData2);
+
+        foreach (var gpu in Gpus)
+        {
+            if (gpu.GpuVersion == StoredData1)
+            {
+                StoredDataList.Add(gpu.GpuSpeed);
+                StoredDataList.Add(gpu.GpuVram);
+            }
+
+            if (gpu.GpuVersion == StoredData2)
+            {
+                StoredDataList.Add(gpu.GpuSpeed);
+                StoredDataList.Add(gpu.GpuVram);
+            }
+        }
+        for (int x = 0; x < ((StoredDataList.Count) / 2); x++)
+        {
+            if (StoredDataList.Skip(x).FirstOrDefault() == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+            {
+                StoredTestList.Add(null);
+            }
+            else if (StoredDataList.Skip(x).FirstOrDefault() > StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+            {
+                foreach (var ram in Gpus)
+                {
+                    for (int y = 0; y < ((StoredDataList.Count) / 2); y++)
+                    {
+                        if (ram.GpuVersion == StoredSavedDataList.Skip(y).FirstOrDefault())
+                        {
+                            if (ram.GpuSpeed == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.GpuVersion);
+                                break;
+                            }
+                            else if (ram.GpuVram == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.GpuVersion);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var ram in Gpus)
+                {
+                    for (int y = 0; y < ((StoredDataList.Count) / 2); y++)
+                    {
+                        if (ram.GpuVersion == StoredSavedDataList.Skip(y).FirstOrDefault())
+                        {
+                            if (ram.GpuSpeed == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.GpuVersion);
+                                break;
+                            }
+                            else if (ram.GpuVram == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.GpuVersion);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

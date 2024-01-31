@@ -1,0 +1,38 @@
+﻿<EditForm Model="@ram" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Rams Brand: </label>
+        <div>
+            <InputText @bind-Value="@ram.RamBrand" class="form-control" />
+            <ValidationMessage For="@(() => ram.RamBrand)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Ram Speed: </label>
+        <div>
+            <InputNumber @bind-Value="@ram.RamSpeed" class="form-control" />
+            <ValidationMessage For="@(() => ram.RamSpeed)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Ram Amount: </label>
+        <div>
+            <InputNumber @bind-Value="@ram.RamAmount" class="form-control" />
+            <ValidationMessage For="@(() => ram.RamAmount)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+@code {
+    [Parameter] public Ram? ram{ get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

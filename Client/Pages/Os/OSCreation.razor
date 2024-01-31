@@ -1,0 +1,34 @@
+﻿@page "/oss/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Gpu Creation</h3>
+<hr />
+<br />
+
+<EditForm Model="@os" OnValidSubmit="CreateOs">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Os Name: </label>
+        <div>
+            <InputText @bind-Value="@os.OsType" class="form-control" />
+            <ValidationMessage For="@(() => os.OsType)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Os
+    </button>
+
+</EditForm>
+
+@code {
+    OS os= new OS();
+
+    private async Task CreateOs()
+    {
+        await _client.PostAsJsonAsync(Endpoints.OSsEndpoint, os);
+        _navManager.NavigateTo("/oss/");
+    }
+}

@@ -1,0 +1,31 @@
+﻿@page "/laptops/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Laptop</h3>
+
+<Laptop_FormComponent ButtonText="Update" OnValidSubmit="EditLaptop" laptop="laptop"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    Laptop laptop= new Laptop();
+    Cpu cpu = new Cpu();
+    Gpu gpu = new Gpu();
+    Ram ram = new Ram();
+    OS os = new OS();
+    Screen screen = new Screen();
+    Wifi wifi = new Wifi();
+
+    protected async override Task OnInitializedAsync()
+    {
+        laptop = await _client.GetFromJsonAsync<Laptop>($"{Endpoints.LaptopsEndpoint}/{id}");
+
+    }
+
+    async Task EditLaptop()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.LaptopsEndpoint}/{id}", laptop);
+        _navManager.NavigateTo("/laptops/");
+    }
+
+}
