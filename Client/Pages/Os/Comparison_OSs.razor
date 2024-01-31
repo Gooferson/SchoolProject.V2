@@ -1,0 +1,84 @@
+﻿@page "/oss/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select OSs</h3>
+<hr />
+<br />
+
+<EditForm Model="@os" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>OS 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedOSBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (OSs != null)
+                {
+                    foreach (var os in OSs)
+                    {
+                        <option value="@os.OsType">@os.OsType</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => os.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>OS 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedOSBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (OSs != null)
+                {
+                    foreach (var os in OSs)
+                    {
+                        <option value="@os.OsType">@os.OsType</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => os.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    OS os = new OS();
+
+    // Separate properties for each dropdown
+    private string selectedOSBrand1 = "";
+    private string selectedOSBrand2 = "";
+
+    private IList<OS>? OSs;
+
+    protected async override Task OnInitializedAsync()
+    {
+        OSs = await _client.GetFromJsonAsync<List<OS>>($"{Endpoints.OSsEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/OSs/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedOSBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedOSBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedOSBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedOSBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedOSBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedOSBrand2);
+    }
+}

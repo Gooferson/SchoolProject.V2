@@ -1,0 +1,80 @@
+﻿@page "/screens/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<h1>Create Screens</h1>
+
+<a href="/screens/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Screen
+</a>
+<br />
+<br />
+
+<a href="/screens/comparisons" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Compare Screens
+</a>
+<br />
+<br />
+
+@if (Screens == null)
+{
+    <div class="alert alert-info">Loading Screens...</div>
+}
+
+else
+{
+    <table class="table table-responsive">
+        <thread>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thread>
+        <tbody>
+            @foreach (var screen in Screens)
+            {
+                <tr>
+                    <td>@screen.ScreenName</td>
+                    <td>
+                        <a href="/screens/view/@screen.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+                        <a href="/screens/edit/@screen.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(screen.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private List<Screen>? Screens;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Screens = await _client.GetFromJsonAsync<List<Screen>>($"{Endpoints.ScreensEndpoint}");
+    }
+
+    async Task Delete(int ScreenId)    
+    {
+        if (Screens != null)
+        {
+            var Screen = Screens.First(q => q.Id == ScreenId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Screen.ScreenName}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.ScreensEndpoint}/{ScreenId}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+}

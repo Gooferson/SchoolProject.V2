@@ -1,0 +1,24 @@
+﻿@page "/screens/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Screen</h3>
+
+<Screens_FormComponent ButtonText="Update" OnValidSubmit="EditGpu" screen = "screen"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    Screen screen= new Screen();
+
+    protected async override Task OnInitializedAsync()
+    {
+        screen = await _client.GetFromJsonAsync<Screen>($"{Endpoints.ScreensEndpoint}/{id}");
+    }
+
+    async Task EditGpu()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.ScreensEndpoint}/{id}", screen);
+        _navManager.NavigateTo("/screens/");
+    }
+
+}

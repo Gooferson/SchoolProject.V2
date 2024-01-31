@@ -1,27 +1,27 @@
-﻿@page "/cpus/"
+﻿@page "/oss/"
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
 
-<h1>Create Cpus</h1>
+<h1>Create Os</h1>
 
-<a href="/cpus/create" class="btn btn-secondary">
+<a href="/oss/create" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
-    Create New Cpu
+    Create New Os
 </a>
 <br />
 <br />
 
-<a href="/cpus/comparisons" class="btn btn-secondary">
+<a href="/oss/comparisons" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
-    Compare Cpus
+    Compare Os
 </a>
 <br />
 <br />
 
-@if (Cpus == null)
+@if (OSs == null)
 {
-    <div class="alert alert-info">Loading Cpus...</div>
+    <div class="alert alert-info">Loading OS...</div>
 }
 
 else
@@ -34,18 +34,18 @@ else
             </tr>
         </thread>
         <tbody>
-            @foreach (var cpu in Cpus)
+            @foreach (var os in OSs)
             {
                 <tr>
-                    <td>@cpu.CpuBrand</td>
+                    <td>@os.OsType</td>
                     <td>
-                        <a href="/cpus/view/@cpu.Id" class="btn btn-primary">
+                        <a href="/oss/view/@os.Id" class="btn btn-primary">
                             <span class="oi oi-book"></span>
                         </a>
-                        <a href="/cpus/edit/@cpu.Id" class="btn btn-warning">
+                        <a href="/oss/edit/@os.Id" class="btn btn-warning">
                             <span class="oi oi-pencil"></span>
                         </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(cpu.Id))">
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(os.Id))">
                             <span class="oi oi-delete"></span>
                         </button>
                     </td>
@@ -57,22 +57,22 @@ else
 }
 
 @code {
-    private List<Cpu>? Cpus;
+    private List<OS>? OSs;
 
     protected async override Task OnInitializedAsync()
     {
-        Cpus = await _client.GetFromJsonAsync<List<Cpu>>($"{Endpoints.CpusEndpoint}");
+        OSs = await _client.GetFromJsonAsync<List<OS>>($"{Endpoints.OSsEndpoint}");
     }
 
-    async Task Delete(int CpuId)    
+    async Task Delete(int OSId)    
     {
-        if (Cpus != null)
+        if (OSs != null)
         {
-            var Cpu = Cpus.First(q => q.Id == CpuId);
-            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Cpu.CpuBrand}?");
+            var OS = OSs.First(q => q.Id == OSId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {OS.OsType}?");
             if (confirm)
             {
-                await _client.DeleteAsync($"{Endpoints.CpusEndpoint}/{CpuId}");
+                await _client.DeleteAsync($"{Endpoints.OSsEndpoint}/{OSId}");
                 await OnInitializedAsync();
             }
         }

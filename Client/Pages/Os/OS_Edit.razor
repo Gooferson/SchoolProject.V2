@@ -1,0 +1,24 @@
+﻿@page "/oss/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>OS</h3>
+
+<OSs_FormComponent ButtonText="Update" OnValidSubmit="EditGpu" os = "os"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    OS os= new OS();
+
+    protected async override Task OnInitializedAsync()
+    {
+        os = await _client.GetFromJsonAsync<OS>($"{Endpoints.OSsEndpoint}/{id}");
+    }
+
+    async Task EditGpu()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.OSsEndpoint}/{id}", os);
+        _navManager.NavigateTo("/oss/");
+    }
+
+}

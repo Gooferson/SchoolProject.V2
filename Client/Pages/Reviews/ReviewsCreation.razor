@@ -1,0 +1,50 @@
+﻿@page "/reviews/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Review Creation</h3>
+<hr />
+<br />
+
+<EditForm Model="@review" OnValidSubmit="CreateReview">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Review Rating: </label>
+        <div>
+            <InputText @bind-Value="@review.RevRating" class="form-control" />
+            <ValidationMessage For="@(() => review.RevRating)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Review Content: </label>
+        <div>
+            <InputText @bind-Value="@review.RevContent" class="form-control" />
+            <ValidationMessage For="@(() => review.RevContent)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Review Tittle: </label>
+        <div>
+            <InputText @bind-Value="@review.RevTittle" class="form-control" />
+            <ValidationMessage For="@(() => review.RevTittle)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Review
+    </button>
+
+</EditForm>
+
+@code {
+    Reviews review= new Reviews();
+
+    private async Task CreateReview()
+    {
+        await _client.PostAsJsonAsync(Endpoints.ReviewsEndpoint, review);
+        _navManager.NavigateTo("/reviews/");
+    }
+}

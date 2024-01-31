@@ -1,0 +1,84 @@
+﻿@page "/gpus/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select Gpus</h3>
+<hr />
+<br />
+
+<EditForm Model="@gpu" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Gpu 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedGpuBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (Gpus != null)
+                {
+                    foreach (var gpu in Gpus)
+                    {
+                        <option value="@gpu.GpuVersion">@gpu.GpuVersion</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => gpu.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Gpu 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedGpuBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (Gpus != null)
+                {
+                    foreach (var gpu in Gpus)
+                    {
+                        <option value="@gpu.GpuVersion">@gpu.GpuVersion</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => gpu.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    Gpu gpu = new Gpu();
+
+    // Separate properties for each dropdown
+    private string selectedGpuBrand1 = "";
+    private string selectedGpuBrand2 = "";
+
+    private IList<Gpu>? Gpus;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Gpus = await _client.GetFromJsonAsync<List<Gpu>>($"{Endpoints.GpusEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/Gpus/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedGpuBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedGpuBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedGpuBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedGpuBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedGpuBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedGpuBrand2);
+    }
+}

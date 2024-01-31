@@ -14,58 +14,58 @@ namespace SchoolProject.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartsController : ControllerBase
+    public class WifisController : ControllerBase
     {
         //private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CartsController(IUnitOfWork unitOfWork)
+        public WifisController(IUnitOfWork unitOfWork)
         {
             //_context = context;
             _unitOfWork = unitOfWork;
         }
 
-        // GET: api/Carts
+        // GET: api/Wifis
         [HttpGet]
-/*        public async Task<ActionResult<IEnumerable<Cart>>> GetCarts()
+/*        public async Task<ActionResult<IEnumerable<Wifi>>> GetWifis()
         {
-          if (_context.Carts == null)
+          if (_context.Wifis == null)
           {
               return NotFound();
           }
-            return await _context.Carts.ToListAsync();
+            return await _context.Wifis.ToListAsync();
         }*/
-        public async Task<IActionResult> GetCarts()
+        public async Task<IActionResult> GetWifis()
         {
-            var Carts = await _unitOfWork.Carts.GetAll();
-            return Ok(Carts);
+            var Wifis = await _unitOfWork.Wifis.GetAll();
+            return Ok(Wifis);
         }
 
-        // GET: api/Carts/5
+        // GET: api/Wifis/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cart>> GetCart(int id)
+        public async Task<ActionResult<Wifi>> GetWifi(int id)
         {
-            var Cart = await _unitOfWork.Carts.Get(q => q.Id == id);
+            var Wifi = await _unitOfWork.Wifis.Get(q => q.Id == id);
 
-            if (Cart == null)
+            if (Wifi == null)
             {
                 return NotFound();
             }
 
-            return Ok(Cart);
+            return Ok(Wifi);
         }
 
-        // PUT: api/Carts/5
+        // PUT: api/Wifis/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCart(int id, Cart Cart)
+        public async Task<IActionResult> PutWifi(int id, Wifi Wifi)
         {
-            if (id != Cart.Id)
+            if (id != Wifi.Id)
             {
                 return BadRequest();
             }
 
-            _unitOfWork.Carts.Update(Cart);
+            _unitOfWork.Wifis.Update(Wifi);
 
             try
             {   
@@ -73,7 +73,7 @@ namespace SchoolProject.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await CartExists(id))
+                if (!await WifiExists(id))
                 {
                     return NotFound();
                 }
@@ -86,36 +86,36 @@ namespace SchoolProject.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Carts
+        // POST: api/Wifis
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cart>> PostCart(Cart Cart)
+        public async Task<ActionResult<Wifi>> PostWifi(Wifi Wifi)
         {
-            await _unitOfWork.Carts.Insert(Cart);
+            await _unitOfWork.Wifis.Insert(Wifi);
             await _unitOfWork.Save(HttpContext);
-            return CreatedAtAction("GetCart", new { id = Cart.Id }, Cart);
+            return CreatedAtAction("GetWifi", new { id = Wifi.Id }, Wifi);
         }
 
-        // DELETE: api/Carts/5
+        // DELETE: api/Wifis/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCart(int id)
+        public async Task<IActionResult> DeleteWifi(int id)
         {
-            var Cart = await _unitOfWork.Carts.Get(q=>q.Id == id);
-            if (Cart == null) 
+            var Wifi = await _unitOfWork.Wifis.Get(q=>q.Id == id);
+            if (Wifi == null) 
             { 
                 return NotFound();
             }
 
-            await _unitOfWork.Carts.Delete(id);
+            await _unitOfWork.Wifis.Delete(id);
             await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }
 
 
-        private async Task<bool> CartExists(int id)
+        private async Task<bool> WifiExists(int id)
         {
-            var make = await _unitOfWork.Carts.Get(q => q.Id == id);
+            var make = await _unitOfWork.Wifis.Get(q => q.Id == id);
             return make != null;
 
             //return (_context.Makes?.Any(e => e.Id == id)).GetValueOrDefault();

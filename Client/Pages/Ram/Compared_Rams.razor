@@ -1,0 +1,165 @@
+﻿@page "/rams/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Ram Brand</th>
+            <th>Ram Speed</th>
+            <th>Ram Amount</th>
+        </tr>
+        <tr>
+            @foreach (var ram in Rams)
+            {
+                if (ram.RamBrand == @StoredData1)
+                {
+                    <th>@ram.RamBrand</th>
+                    <th>@ram.RamSpeed</th>
+                    <th>@ram.RamAmount</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var ram in Rams)
+            {
+                if (ram.RamBrand == @StoredData2)
+                {
+                    <th>@ram.RamBrand</th>
+                    <th>@ram.RamSpeed</th>
+                    <th>@ram.RamAmount</th>
+                }
+            }
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Ram Speed</th>
+            <th>Ram Amount</th>
+        </tr>
+        <tr>
+            @for (int x = 0; x < StoredTestList.Count(); x++)
+            {
+                if (StoredTestList.Skip(x).FirstOrDefault() == null)
+                {
+                    <th>Equal</th>
+                }
+                else
+                {
+                    foreach (var screen in Rams)
+                    {
+                        if (screen.RamBrand == StoredTestList.Skip(x).FirstOrDefault())
+                        {
+                            <th>@screen.RamBrand</th>
+                        }
+                    }
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    Ram ram= new Ram();
+    private List<Ram>? Rams;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+    private List<int?> StoredDataList = new List<int?>();
+    private List<string?> StoredSavedDataList = new List<string?>();
+    private List<string?> StoredTestList = new List<string?>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Rams = await _client.GetFromJsonAsync<List<Ram>>($"{Endpoints.RamsEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+        StoredSavedDataList.Add(StoredData1);
+        StoredSavedDataList.Add(StoredData2);
+
+        foreach (var screen in Rams)
+        {
+            if (screen.RamBrand == StoredData1)
+            {
+                StoredDataList.Add(screen.RamSpeed);
+                StoredDataList.Add(screen.RamAmount);
+            }
+
+            if (screen.RamBrand == StoredData2)
+            {
+                StoredDataList.Add(screen.RamSpeed);
+                StoredDataList.Add(screen.RamAmount);
+            }
+        }
+        for (int x = 0; x < ((StoredDataList.Count) / 2); x++)
+        {
+            if (StoredDataList.Skip(x).FirstOrDefault() == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+            {
+                StoredTestList.Add(null);
+            }
+            else if (StoredDataList.Skip(x).FirstOrDefault() > StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+            {
+                foreach (var ram in Rams)
+                {
+                    for (int y = 0; y < ((StoredDataList.Count) / 2); y++)
+                    {
+                        if (ram.RamBrand == StoredSavedDataList.Skip(y).FirstOrDefault())
+                        {
+                            if (ram.RamSpeed == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.RamBrand);
+                                break;
+                            }
+                            else if (ram.RamAmount == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.RamBrand);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var ram in Rams)
+                {
+                    for (int y = 0; y < ((StoredDataList.Count) / 2); y++)
+                    {
+                        if (ram.RamBrand== StoredSavedDataList.Skip(y).FirstOrDefault())
+                        {
+                            if (ram.RamSpeed == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.RamBrand);
+                                break;
+                            }
+                            else if (ram.RamAmount == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                StoredTestList.Add(ram.RamBrand);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

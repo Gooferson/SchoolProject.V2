@@ -1,0 +1,84 @@
+﻿@page "/laptops/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select Laptops</h3>
+<hr />
+<br />
+
+<EditForm Model="@laptop" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Laptop 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedLaptopBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (Laptops != null)
+                {
+                    foreach (var laptop in Laptops)
+                    {
+                        <option value="@laptop.LaptopName">@laptop.LaptopName</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Laptop 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedLaptopBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (Laptops != null)
+                {
+                    foreach (var laptop in Laptops)
+                    {
+                        <option value="@laptop.LaptopName">@laptop.LaptopName</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    Laptop laptop= new Laptop();
+
+    // Separate properties for each dropdown
+    private string selectedLaptopBrand1 = "";
+    private string selectedLaptopBrand2 = "";
+
+    private IList<Laptop>? Laptops;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Laptops = await _client.GetFromJsonAsync<List<Laptop>>($"{Endpoints.LaptopsEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/Laptops/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedLaptopBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedLaptopBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedLaptopBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedLaptopBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedLaptopBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedLaptopBrand2);
+    }
+}

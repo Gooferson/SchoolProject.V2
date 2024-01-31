@@ -1,0 +1,179 @@
+﻿@page "/laptops/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Laptops Creation</h3>
+<hr />
+<br />
+
+<EditForm Model="@laptop" OnValidSubmit="CreateLaptop">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Laptop Name: </label>
+        <div>
+            <InputText @bind-Value="@laptop.LaptopName" class="form-control" />
+            <ValidationMessage For="@(() => laptop.LaptopName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Laptop Description: </label>
+        <div>
+            <InputText @bind-Value="@laptop.LaptopDescription" class="form-control" />
+            <ValidationMessage For="@(() => laptop.LaptopDescription)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Laptop Category: </label>
+        <div>
+            <InputText @bind-Value="@laptop.LaptopCategory" class="form-control" />
+            <ValidationMessage For="@(() => laptop.LaptopCategory)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Laptop Price: </label>
+        <div>
+            <InputNumber @bind-Value="@laptop.LaptopPrice" class="form-control" />
+            <ValidationMessage For="@(() => laptop.LaptopPrice)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Cpu: </label>
+        <div>
+            <InputSelect @bind-Value="@laptop.CpuID" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (Cpus != null)
+                {
+                    foreach (var cpu in Cpus)
+                    {
+                        <option value="@cpu.Id">@cpu.CpuBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.CpuID)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Gpu: </label>
+        <div>
+            <InputSelect @bind-Value="@laptop.GpuID" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (Gpus != null)
+                {
+                    foreach (var gpu in Gpus)
+                    {
+                        <option value="@gpu.Id">@gpu.GpuVersion</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.GpuID)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Os: </label>
+        <div>
+            <InputSelect @bind-Value="@laptop.OSID" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (OSs != null)
+                {
+                    foreach (var os in OSs)
+                    {
+                        <option value="@os.Id">@os.OsType</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.OSID)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen: </label>
+        <div>
+            <InputSelect @bind-Value="@laptop.ScreenID" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (Screens != null)
+                {
+                    foreach (var screen in Screens)
+                    {
+                        <option value="@screen.Id">@screen.ScreenName</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.ScreenID)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Ram: </label>
+        <div>
+            <InputSelect @bind-Value="@laptop.RamID" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (Rams != null)
+                {
+                    foreach (var ram in Rams)
+                    {
+                        <option value="@ram.Id">@ram.RamBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.RamID)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Wifi: </label>
+        <div>
+            <InputSelect @bind-Value="@laptop.WifiID" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (Cpus != null)
+                {
+                    foreach (var wifi in Wifis)
+                    {
+                        <option value="@wifi.Id">@wifi.WifiBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => laptop.WifiID)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Laptop
+    </button>
+
+</EditForm>
+
+@code {
+    Laptop laptop= new Laptop();
+
+    private IList<Cpu>? Cpus;
+    private IList<Ram>? Rams;
+    private IList<OS>? OSs;
+    private IList<Screen>? Screens;
+    private IList<Gpu>? Gpus;
+    private IList<Wifi>? Wifis;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Cpus = await _client.GetFromJsonAsync<List<Cpu>>($"{Endpoints.CpusEndpoint}");
+        Rams = await _client.GetFromJsonAsync<List<Ram>>($"{Endpoints.RamsEndpoint}");
+        OSs = await _client.GetFromJsonAsync<List<OS>>($"{Endpoints.OSsEndpoint}");
+        Screens = await _client.GetFromJsonAsync<List<Screen>>($"{Endpoints.ScreensEndpoint}");
+        Gpus = await _client.GetFromJsonAsync<List<Gpu>>($"{Endpoints.GpusEndpoint}");
+        Wifis = await _client.GetFromJsonAsync<List<Wifi>>($"{Endpoints.WifisEndpoint}");
+    }
+
+    private async Task CreateLaptop()
+    {
+        await _client.PostAsJsonAsync(Endpoints.LaptopsEndpoint, laptop);
+        _navManager.NavigateTo("/laptops/");
+    }
+}

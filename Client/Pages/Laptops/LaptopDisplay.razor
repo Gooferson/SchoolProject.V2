@@ -1,0 +1,32 @@
+﻿@page "/laptop/display/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<PageTitle>Laptop</PageTitle>
+<!DOCTYPE html>
+
+<a href="/laptop/student">
+    <button>
+        Students
+    </button>
+</a>
+<a href="/laptop/home">
+    <button>
+        Home
+    </button>
+</a>
+<a href="/laptop/work">
+    <button>
+        Work
+    </button>
+</a>
+<a href="/laptop/gaming">
+    <button>
+        Gaming
+    </button>
+</a>
+
+@code{
+    private List<Laptop>? Laptops;
+}

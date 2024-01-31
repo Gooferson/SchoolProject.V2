@@ -16,7 +16,7 @@ namespace SchoolProject.Shared.Domain
         public virtual Cpu? Cpu { get; set; }
         public int GpuID { get; set; }
         public virtual Gpu? Gpu { get; set; }
-        public int OSID { get; set; }
+        public int OSID { get; set; }   
         public virtual OS? OS { get; set; }
         public int RamID { get; set; }
         public virtual Ram? Ram { get; set; }

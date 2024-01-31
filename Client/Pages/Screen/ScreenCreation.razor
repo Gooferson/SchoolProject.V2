@@ -1,0 +1,89 @@
+﻿@page "/screens/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Screen Creation</h3>
+<hr />
+<br />
+
+<EditForm Model="@screen" OnValidSubmit="CreateScreen">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Screens Brand: </label>
+        <div>
+            <InputText @bind-Value="@screen.ScreenBrand" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenBrand)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen Resolution: </label>
+        <div>
+            <InputText @bind-Value="@screen.ScreenResolution" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenResolution)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen Size: </label>
+        <div>
+            <InputNumber @bind-Value="@screen.ScreenSize" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenSize)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Screen Finish: </label>
+        <div>
+            <InputText @bind-Value="@screen.ScreenFinish" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenFinish)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen Hz: </label>
+        <div>
+            <InputNumber @bind-Value="@screen.ScreenHz" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenHz)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen Name: </label>
+        <div>
+            <InputText @bind-Value="@screen.ScreenName" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen Touchscreen: </label>
+        <div>
+            <InputText @bind-Value="@screen.ScreenTouch" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenTouch)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen Type: </label>
+        <div>
+            <InputText @bind-Value="@screen.ScreenType" class="form-control" />
+            <ValidationMessage For="@(() => screen.ScreenType)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Screen
+    </button>
+
+</EditForm>
+
+@code {
+    Screen screen = new Screen();
+
+    private async Task CreateScreen()
+    {
+        await _client.PostAsJsonAsync(Endpoints.ScreensEndpoint, screen);
+        _navManager.NavigateTo("/screens/");
+    }
+}

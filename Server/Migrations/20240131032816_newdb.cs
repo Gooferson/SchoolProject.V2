@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolProject.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedDefaultDataAndUser : Migration
+    public partial class newdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -211,11 +211,13 @@ namespace SchoolProject.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ScreenBrand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ScreenName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScreenType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScreenResolution = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScreenFinish = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScreenTouch = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ScreenSie = table.Column<int>(type: "int", nullable: true),
+                    ScreenSize = table.Column<int>(type: "int", nullable: true),
                     ScreenHz = table.Column<int>(type: "int", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -233,6 +235,8 @@ namespace SchoolProject.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    WifiBrand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WifiName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WifiType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -493,6 +497,7 @@ namespace SchoolProject.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    RevTittle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RevContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RevRating = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserID = table.Column<int>(type: "int", nullable: true),
@@ -523,8 +528,8 @@ namespace SchoolProject.Server.Migrations
                 columns: new[] { "Id", "CpuBrand", "CpuCores", "CpuSpeed", "CpuVersion", "CreatedBy", "DateCreated", "DateUpdated", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "AMD", 10, "14098Hz", "System", null, new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6406), new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6424), null },
-                    { 2, "Intel", 10, "14098Hz", "System", null, new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6432), new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6433), null }
+                    { 1, "AMD", 10, "14098Hz", "System", null, new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5658), new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5670), null },
+                    { 2, "Intel", 10, "14098Hz", "System", null, new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5674), new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5675), null }
                 });
 
             migrationBuilder.CreateIndex(

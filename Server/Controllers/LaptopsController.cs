@@ -27,18 +27,23 @@ namespace SchoolProject.Server.Controllers
 
         // GET: api/Laptops
         [HttpGet]
-/*        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops()
+        /*        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops()
+                {
+                  if (_context.Laptops == null)
+                  {
+                      return NotFound();
+                  }
+                    return await _context.Laptops.ToListAsync();
+                }*/
+        public async Task<IActionResult> GetLaptop()
         {
-          if (_context.Laptops == null)
-          {
-              return NotFound();
-          }
-            return await _context.Laptops.ToListAsync();
-        }*/
-        public async Task<IActionResult> GetLaptops()
-        {
-            var Laptops = await _unitOfWork.Laptops.GetAll();
-            return Ok(Laptops);
+            var Laptop = await _unitOfWork.Laptops.GetAll(includes: q => q.Include(x => x.Cpu).Include(x => x.Gpu).Include(x => x.OS).Include(x => x.Ram).Include(x => x.Screen).Include(x => x.Wifi));
+            if (Laptop == null)
+            {
+                return NotFound();
+            }
+            //return await _context.Vehicles.ToListAsync();
+            return Ok(Laptop);
         }
 
         // GET: api/Laptops/5

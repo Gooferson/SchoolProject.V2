@@ -1,0 +1,24 @@
+﻿@page "/cpus/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Cpu_Edit</h3>
+
+<Cpu_FormComponent ButtonText="Update" OnValidSubmit="EditCpu" cpu = "cpu"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    Cpu cpu = new Cpu();
+
+    protected async override Task OnInitializedAsync()
+    {
+        cpu = await _client.GetFromJsonAsync<Cpu>($"{Endpoints.CpusEndpoint}/{id}");
+    }
+
+    async Task EditCpu()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.CpusEndpoint}/{id}", cpu);
+        _navManager.NavigateTo("/cpus/");
+    }
+
+}

@@ -1,0 +1,65 @@
+﻿@page "/oss/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Os Type</th>
+        </tr>
+        <tr>
+            @foreach (var os in Os)
+            {
+                if (os.OsType == @StoredData1)
+                {
+                    <th>@os.OsType</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var os in Os)
+            {
+                if (os.OsType == @StoredData2)
+                {
+                    <th>@os.OsType</th>
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    OS os= new OS();
+    private List<OS>? Os;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Os = await _client.GetFromJsonAsync<List<OS>>($"{Endpoints.OSsEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+    }
+
+}

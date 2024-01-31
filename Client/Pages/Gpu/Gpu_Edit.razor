@@ -1,0 +1,24 @@
+﻿@page "/gpus/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Gpu</h3>
+
+<Gpu_FormComponent ButtonText="Update" OnValidSubmit="EditGpu" gpu = "gpu"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    Gpu gpu = new Gpu();
+
+    protected async override Task OnInitializedAsync()
+    {
+        gpu = await _client.GetFromJsonAsync<Gpu>($"{Endpoints.GpusEndpoint}/{id}");
+    }
+
+    async Task EditGpu()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.GpusEndpoint}/{id}", gpu);
+        _navManager.NavigateTo("/gpus/");
+    }
+
+}

@@ -8,6 +8,8 @@ namespace SchoolProject.Shared.Domain
 {
     public class Wifi : BaseDomainModel
     {
+        public string? WifiBrand { get; set; }
+        public string? WifiName { get; set; }
         public string? WifiType { get; set; }
 
     }

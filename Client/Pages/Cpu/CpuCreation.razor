@@ -1,0 +1,58 @@
+﻿@page "/cpus/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>CpuCreation</h3>
+<hr />
+<br />
+
+<EditForm Model="@cpu" OnValidSubmit="CreateCpus">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Cpus Brand: </label>
+        <div>
+            <InputText @bind-Value="@cpu.CpuBrand" class="form-control" />
+            <ValidationMessage For="@(() => cpu.CpuBrand)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Cpus Speed: </label>
+        <div>
+            <InputText @bind-Value="@cpu.CpuSpeed" class="form-control" />
+            <ValidationMessage For="@(() => cpu.CpuSpeed)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Cpus Version: </label>
+        <div>
+            <InputText @bind-Value="@cpu.CpuVersion" class="form-control" />
+            <ValidationMessage For="@(() => cpu.CpuVersion)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Cpus Cores: </label>
+        <div>
+            <InputNumber @bind-Value="@cpu.CpuCores" class="form-control" />
+            <ValidationMessage For="@(() => cpu.CpuCores)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Cpu
+    </button>
+
+</EditForm>
+
+@code {
+    Cpu cpu = new Cpu();
+
+    private async Task CreateCpus()
+    {
+        await _client.PostAsJsonAsync(Endpoints.CpusEndpoint, cpu);
+        _navManager.NavigateTo("/cpus/");
+    }
+}

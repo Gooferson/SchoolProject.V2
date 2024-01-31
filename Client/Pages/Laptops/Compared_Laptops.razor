@@ -1,0 +1,278 @@
+﻿@page "/laptops/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Laptop Name</th>
+            <th>Laptop Category</th>
+            <th>Laptop Price</th>
+            <th>Cpu Name</th>
+            <th>Gpu Name</th>
+            <th>OS Name</th>
+            <th>Ram Name</th>
+            <th>Screen Name</th>
+            <th>Wifi Name</th>
+        </tr>
+        <tr>
+            @foreach (var laptop in Laptops)
+            {
+                if (laptop.LaptopName == @StoredData1)
+                {
+                    <th>@laptop.LaptopName</th>
+                    <th>@laptop.LaptopCategory</th>
+                    <th>@laptop.LaptopPrice</th>
+                    <th>@laptop.Cpu.CpuBrand</th>
+                    <th>@laptop.Gpu.GpuBrand</th>
+                    <th>@laptop.OS.OsType</th>
+                    <th>@laptop.Ram.RamBrand</th>
+                    <th>@laptop.Screen.ScreenBrand</th>
+                    <th>@laptop.Wifi.WifiName</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var laptop in Laptops)
+            {
+                if (laptop.LaptopName == @StoredData2)
+                {
+                    <th>@laptop.LaptopName</th>
+                    <th>@laptop.LaptopCategory</th>
+                    <th>@laptop.LaptopPrice</th>
+                    <th>@laptop.Cpu.CpuBrand</th>
+                    <th>@laptop.Gpu.GpuBrand</th>
+                    <th>@laptop.OS.OsType</th>
+                    <th>@laptop.Ram.RamBrand</th>
+                    <th>@laptop.Screen.ScreenBrand</th>
+                    <th>@laptop.Wifi.WifiName</th>
+                }
+            }
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Price (Which is more expensive)</th>
+            <th>GpuVram (Which has more)</th>
+            <th>GpuSpeed (Which is faster)</th>
+            <th>CpuCores (Which has more)</th>
+            <th>RamSpeed (Which is faster)</th>
+            <th>RamAmount (Which has more)</th>
+            <th>ScreenSize (Which is bigger)</th>
+            <th>ScreenHz (Which has a higher refresh rate)</th>
+        </tr>
+        <tr>
+            @for (int x = 0; x < StoredTestList.Count(); x++)
+            {
+                if (StoredTestList.Skip(x).FirstOrDefault() == null)
+                {
+                    <th>Equal</th>
+                }
+                else
+                {
+                    foreach (var screen in Laptops)
+                    {
+                        if (screen.LaptopName == StoredTestList.Skip(x).FirstOrDefault())
+                        {
+                            <th>@screen.LaptopName</th>
+                        }
+                    }
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    private List<Laptop>? Laptops;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+    private List<int?> StoredDataList = new List<int?>();
+    private List<string?> StoredSavedDataList = new List<string?>();
+    private List<string?> StoredTestList = new List<string?>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Laptops = await _client.GetFromJsonAsync<List<Laptop>>($"{Endpoints.LaptopsEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+        StoredSavedDataList.Add(StoredData1);
+        StoredSavedDataList.Add(StoredData2);
+
+        foreach (var laptop in Laptops)
+        {
+            if (laptop.LaptopName == StoredData1)
+            {
+                StoredDataList.Add(laptop.LaptopPrice);
+                StoredDataList.Add(laptop.Gpu.GpuVram);
+                StoredDataList.Add(laptop.Gpu.GpuSpeed);
+                StoredDataList.Add(laptop.Cpu.CpuCores);
+                StoredDataList.Add(laptop.Ram.RamSpeed);
+                StoredDataList.Add(laptop.Ram.RamAmount);
+                StoredDataList.Add(laptop.Screen.ScreenSize);
+                StoredDataList.Add(laptop.Screen.ScreenHz);
+            }
+
+            if (laptop.LaptopName == StoredData2)
+            {
+                StoredDataList.Add(laptop.LaptopPrice);
+                StoredDataList.Add(laptop.Gpu.GpuVram);
+                StoredDataList.Add(laptop.Gpu.GpuSpeed);
+                StoredDataList.Add(laptop.Cpu.CpuCores);
+                StoredDataList.Add(laptop.Ram.RamSpeed);
+                StoredDataList.Add(laptop.Ram.RamAmount);
+                StoredDataList.Add(laptop.Screen.ScreenSize);
+                StoredDataList.Add(laptop.Screen.ScreenHz);
+            }
+        }
+        for (int x = 0; x < ((StoredDataList.Count) / 2); x++)
+        {
+            if (StoredDataList.Skip(x).FirstOrDefault() == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+            {
+                StoredTestList.Add(null);
+                Console.WriteLine(x);
+            }
+            else if (StoredDataList.Skip(x).FirstOrDefault() > StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+            {
+                foreach (var laptop in Laptops)
+                {
+                    for (int y = 0; y < ((StoredDataList.Count) / 2); y++)
+                    {
+                        if (laptop.LaptopName == StoredSavedDataList.Skip(y).FirstOrDefault())
+                        {
+                            if (laptop.LaptopPrice == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Gpu.GpuVram == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test1");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Gpu.GpuSpeed == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test2");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Cpu.CpuCores == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test3");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Ram.RamSpeed == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test4");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Ram.RamAmount == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test5");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Screen.ScreenSize == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test6");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Screen.ScreenHz == StoredDataList.Skip(x).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test7");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var laptop in Laptops)
+                {
+                    for (int y = 0; y < ((StoredDataList.Count) / 2); y++)
+                    {
+                        if (laptop.LaptopName == StoredSavedDataList.Skip(y).FirstOrDefault())
+                        {
+                            if (laptop.LaptopPrice == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test8");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Gpu.GpuVram == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test9");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Gpu.GpuSpeed == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test10");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Cpu.CpuCores == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test11");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Ram.RamSpeed == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test12");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Ram.RamAmount == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test13");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Screen.ScreenSize == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test14");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                            else if (laptop.Screen.ScreenHz == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
+                            {
+                                Console.WriteLine("Test15");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
