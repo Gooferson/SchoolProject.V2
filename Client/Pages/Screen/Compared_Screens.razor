@@ -1,0 +1,90 @@
+﻿@page "/screens/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Screen Name</th>
+            <th>Screen Size</th>
+            <th>Screen Brand</th>
+            <th>Screen Type</th>
+            <th>Screen Finish</th>
+            <th>Screen Hz</th>
+            <th>Screen Resolution</th>
+            <th>Screen Touch</th>
+            <th>Screen Type</th>
+        </tr>
+        <tr>
+            @foreach (var screen in Screens)
+            {
+                if (screen.ScreenBrand == @StoredData1)
+                {
+                    <th>@screen.ScreenName</th>
+                    <th>@screen.ScreenSize</th>
+                    <th>@screen.ScreenBrand</th>
+                    <th>@screen.ScreenType</th>
+                    <th>@screen.ScreenFinish</th>
+                    <th>@screen.ScreenHz</th>
+                    <th>@screen.ScreenResolution</th>
+                    <th>@screen.ScreenTouch</th>
+                    <th>@screen.ScreenType</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var screen in Screens)
+            {
+                if (screen.ScreenBrand == @StoredData2)
+                {
+                    <th>@screen.ScreenName</th>
+                    <th>@screen.ScreenSize</th>
+                    <th>@screen.ScreenBrand</th>
+                    <th>@screen.ScreenType</th>
+                    <th>@screen.ScreenFinish</th>
+                    <th>@screen.ScreenHz</th>
+                    <th>@screen.ScreenResolution</th>
+                    <th>@screen.ScreenTouch</th>
+                    <th>@screen.ScreenType</th>
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    Screen screen= new Screen();
+    private List<Screen>? Screens;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Screens = await _client.GetFromJsonAsync<List<Screen>>($"{Endpoints.ScreensEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+
+    }
+
+}

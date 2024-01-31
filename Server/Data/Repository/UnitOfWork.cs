@@ -63,7 +63,7 @@ namespace SchoolProject.Server.Repository
         public IGenericRepository<Wifi> Wifis
             => _wifis ??= new GenericRepository<Wifi>(_context);
 
-
+    
         public void Dispose()
         {
             _context.Dispose();

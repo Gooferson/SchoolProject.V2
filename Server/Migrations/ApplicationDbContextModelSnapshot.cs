@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolProject.Server.Data;
 
@@ -12,11 +11,9 @@ using SchoolProject.Server.Data;
 namespace SchoolProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240122132610_AddedDefaultDataAndUser")]
-    partial class AddedDefaultDataAndUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -486,8 +483,8 @@ namespace SchoolProject.Server.Migrations
                             CpuCores = 10,
                             CpuSpeed = "14098Hz",
                             CpuVersion = "System",
-                            DateCreated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6406),
-                            DateUpdated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6424)
+                            DateCreated = new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5658),
+                            DateUpdated = new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5670)
                         },
                         new
                         {
@@ -496,8 +493,8 @@ namespace SchoolProject.Server.Migrations
                             CpuCores = 10,
                             CpuSpeed = "14098Hz",
                             CpuVersion = "System",
-                            DateCreated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6432),
-                            DateUpdated = new DateTime(2024, 1, 22, 21, 26, 9, 802, DateTimeKind.Local).AddTicks(6433)
+                            DateCreated = new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5674),
+                            DateUpdated = new DateTime(2024, 1, 31, 11, 28, 16, 93, DateTimeKind.Local).AddTicks(5675)
                         });
                 });
 
@@ -724,6 +721,9 @@ namespace SchoolProject.Server.Migrations
                     b.Property<string>("RevRating")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RevTittle")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("TransactionID")
                         .HasColumnType("int");
 
@@ -759,16 +759,22 @@ namespace SchoolProject.Server.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ScreenBrand")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ScreenFinish")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ScreenHz")
                         .HasColumnType("int");
 
+                    b.Property<string>("ScreenName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ScreenResolution")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ScreenSie")
+                    b.Property<int?>("ScreenSize")
                         .HasColumnType("int");
 
                     b.Property<string>("ScreenTouch")
@@ -839,6 +845,12 @@ namespace SchoolProject.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WifiBrand")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WifiName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WifiType")

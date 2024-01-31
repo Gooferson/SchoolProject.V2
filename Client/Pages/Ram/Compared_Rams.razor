@@ -1,0 +1,72 @@
+﻿@page "/rams/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Ram Brand</th>
+            <th>Ram Speed</th>
+            <th>Ram Amount</th>
+        </tr>
+        <tr>
+            @foreach (var ram in Rams)
+            {
+                if (ram.RamBrand == @StoredData1)
+                {
+                    <th>@ram.RamBrand</th>
+                    <th>@ram.RamSpeed</th>
+                    <th>@ram.RamAmount</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var ram in Rams)
+            {
+                if (ram.RamBrand == @StoredData2)
+                {
+                    <th>@ram.RamBrand</th>
+                    <th>@ram.RamSpeed</th>
+                    <th>@ram.RamAmount</th>
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    Ram ram= new Ram();
+    private List<Ram>? Rams;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Rams = await _client.GetFromJsonAsync<List<Ram>>($"{Endpoints.RamsEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+
+    }
+
+}

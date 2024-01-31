@@ -26,8 +26,12 @@ namespace SchoolProject.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCpus()
         {
-            var cpus = await _unitOfWork.Cpus.GetAll();
-            return Ok(cpus);
+            var Cpu = await _unitOfWork.Cpus.GetAll();
+            if (Cpu == null)
+            {
+                return NotFound();
+            }
+            return Ok(Cpu);
         }
 
         // GET: api/Cpus/5
@@ -66,6 +70,10 @@ namespace SchoolProject.Server.Controllers
                 {
                     return NotFound();
                 }
+                else
+                {
+                    throw;
+                }
             }
 
             return NoContent();
@@ -86,11 +94,14 @@ namespace SchoolProject.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCpu(int id)
         {
-            var cpu = await _unitOfWork.Cpus.Get(q => q.Id == id);
-            if (cpu == null)
+            var Cpu = await _unitOfWork.Cpus.Get(q => q.Id == id);
+            if (Cpu == null)
             {
                 return NotFound();
             }
+
+            await _unitOfWork.Cpus.Delete(id);
+            await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }

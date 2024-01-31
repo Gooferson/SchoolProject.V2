@@ -1,4 +1,7 @@
 ﻿@page "/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
 
 <PageTitle>Index</PageTitle>
 
@@ -13,6 +16,24 @@
         <h2 class="h2">
             Our reviews
         </h2>
-        <p class="Text-MidBox">Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text</p>
+        @if (Review != null && Review.Any())
+        {
+            var randomReview = Review[new Random().Next(Review.Count)];
+
+            <p>@randomReview.RevContent</p>
+        }
+        else
+        {
+            <p>No reviews available.</p>
+        }
     </div>
 </div>
+
+@code{
+    private List<SchoolProject.Shared.Domain.Reviews>? Review;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Review = await _client.GetFromJsonAsync<List<SchoolProject.Shared.Domain.Reviews>>($"{Endpoints.ReviewsEndpoint}");
+    }
+}

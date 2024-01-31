@@ -1,0 +1,120 @@
+﻿@page "/cpus/comparisons/compared/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th {
+            background-color:antiquewhite;
+            Color:brown;
+        }
+        th, td {
+            width:150px;
+            text-align:center;
+            border:1px solid black;
+            padding:5px
+         
+        }
+    </style>
+</head>
+
+<div>
+    <table>
+        <tr>
+            <th>Cpu Speed</th>
+            <th>Cpu Cores</th>
+            <th>Cpu Name</th>
+            <th>Cpu Version</th>
+        </tr>
+        <tr>
+            @foreach (var cpu in Cpus)
+            {
+                if (cpu.CpuBrand == @StoredData1)
+                {
+                    <th>@cpu.CpuSpeed</th>
+                    <th>@cpu.CpuCores</th>
+                    <th>@cpu.CpuBrand</th>
+                    <th>@cpu.CpuVersion</th>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var cpu in Cpus)
+            {
+                if (cpu.CpuBrand == @StoredData2)
+                {
+                    <th>@cpu.CpuSpeed</th>
+                    <th>@cpu.CpuCores</th>
+                    <th>@cpu.CpuBrand</th>
+                    <th>@cpu.CpuVersion</th>
+                }
+            }
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Cpu Cores</th>
+        </tr>
+        <tr>
+            @if (StoredNameList.FirstOrDefault() == null)
+            {
+                <th>Equal</th>
+            }
+            else
+            {
+                @foreach (var cpu in Cpus)
+                {
+                    if (cpu.CpuCores == @StoredNameList.FirstOrDefault())
+                    {
+                        <th>@cpu.CpuVersion</th>
+                    }
+                }
+            }
+        </tr>
+    </table>
+</div>
+
+@code{
+    Cpu cpu = new Cpu();
+    private List<Cpu>? Cpus;
+    private string StoredData1 = "";
+    private string StoredData2 = "";
+    private int? StoredCpuCores1 = 0;
+    private int? StoredCpuCores2 = 0;
+    private List<int?> StoredNameList = new List<int?>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Cpus = await _client.GetFromJsonAsync<List<Cpu>>($"{Endpoints.CpusEndpoint}");
+        StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
+        StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+        foreach (var cpu in Cpus)
+        {
+            if (cpu.CpuBrand == StoredData1)
+            {
+                StoredCpuCores1 = cpu.CpuCores;
+            }
+
+            if (cpu.CpuBrand == StoredData2)
+            {
+                StoredCpuCores2 = cpu.CpuCores;
+            }
+        }
+        if (StoredCpuCores1 == StoredCpuCores2)
+        {
+            StoredNameList.Add(null);
+        }
+        else if (StoredCpuCores1 > StoredCpuCores2)
+        {
+            StoredNameList.Add(StoredCpuCores1);
+        }
+        else
+        {
+            StoredNameList.Add(StoredCpuCores2);
+        }
+    }
+}

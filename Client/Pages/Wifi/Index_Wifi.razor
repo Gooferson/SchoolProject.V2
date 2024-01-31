@@ -1,27 +1,27 @@
-﻿@page "/cpus/"
+﻿@page "/wifis/"
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
 
-<h1>Create Cpus</h1>
+<h1>Create Wifis</h1>
 
-<a href="/cpus/create" class="btn btn-secondary">
+<a href="/wifis/create" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
-    Create New Cpu
+    Create New Wifi
 </a>
 <br />
 <br />
 
-<a href="/cpus/comparisons" class="btn btn-secondary">
+<a href="/wifis/comparisons" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
-    Compare Cpus
+    Compare Wifis
 </a>
 <br />
 <br />
 
-@if (Cpus == null)
+@if (Wifis == null)
 {
-    <div class="alert alert-info">Loading Cpus...</div>
+    <div class="alert alert-info">Loading Wifis...</div>
 }
 
 else
@@ -34,18 +34,18 @@ else
             </tr>
         </thread>
         <tbody>
-            @foreach (var cpu in Cpus)
+            @foreach (var wifi in Wifis)
             {
                 <tr>
-                    <td>@cpu.CpuBrand</td>
+                    <td>@wifi.WifiName</td>
                     <td>
-                        <a href="/cpus/view/@cpu.Id" class="btn btn-primary">
+                        <a href="/wifis/view/@wifi.Id" class="btn btn-primary">
                             <span class="oi oi-book"></span>
                         </a>
-                        <a href="/cpus/edit/@cpu.Id" class="btn btn-warning">
+                        <a href="/wifis/edit/@wifi.Id" class="btn btn-warning">
                             <span class="oi oi-pencil"></span>
                         </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(cpu.Id))">
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(wifi.Id))">
                             <span class="oi oi-delete"></span>
                         </button>
                     </td>
@@ -57,22 +57,22 @@ else
 }
 
 @code {
-    private List<Cpu>? Cpus;
+    private List<Wifi>? Wifis;
 
     protected async override Task OnInitializedAsync()
     {
-        Cpus = await _client.GetFromJsonAsync<List<Cpu>>($"{Endpoints.CpusEndpoint}");
+        Wifis = await _client.GetFromJsonAsync<List<Wifi>>($"{Endpoints.WifisEndpoint}");
     }
 
-    async Task Delete(int CpuId)    
+    async Task Delete(int WifiId)    
     {
-        if (Cpus != null)
+        if (Wifis != null)
         {
-            var Cpu = Cpus.First(q => q.Id == CpuId);
-            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Cpu.CpuBrand}?");
+            var Wifi = Wifis.First(q => q.Id == WifiId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Wifi.WifiName}?");
             if (confirm)
             {
-                await _client.DeleteAsync($"{Endpoints.CpusEndpoint}/{CpuId}");
+                await _client.DeleteAsync($"{Endpoints.WifisEndpoint}/{WifiId}");
                 await OnInitializedAsync();
             }
         }

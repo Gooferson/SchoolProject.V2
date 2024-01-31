@@ -1,0 +1,84 @@
+﻿@page "/screens/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select Screens</h3>
+<hr />
+<br />
+
+<EditForm Model="@screen" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Screen 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedScreenBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (Screens != null)
+                {
+                    foreach (var screen in Screens)
+                    {
+                        <option value="@screen.ScreenBrand">@screen.ScreenBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => screen.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screen 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedScreenBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (Screens != null)
+                {
+                    foreach (var screen in Screens)
+                    {
+                        <option value="@screen.ScreenBrand">@screen.ScreenBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => screen.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    Screen screen = new Screen();
+
+    // Separate properties for each dropdown
+    private string selectedScreenBrand1 = "";
+    private string selectedScreenBrand2 = "";
+
+    private IList<Screen>? Screens;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Screens = await _client.GetFromJsonAsync<List<Screen>>($"{Endpoints.ScreensEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/Screens/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedScreenBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedScreenBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedScreenBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedScreenBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedScreenBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedScreenBrand2);
+    }
+}

@@ -1,0 +1,84 @@
+﻿@page "/wifis/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select Wifis</h3>
+<hr />
+<br />
+
+<EditForm Model="@wifi" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Wifi 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedWifiBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (Wifis != null)
+                {
+                    foreach (var wifi in Wifis)
+                    {
+                        <option value="@wifi.WifiBrand">@wifi.WifiBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => wifi.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Wifi 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedWifiBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (Wifis != null)
+                {
+                    foreach (var wifi in Wifis)
+                    {
+                        <option value="@wifi.WifiBrand">@wifi.WifiBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => wifi.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    Wifi wifi = new Wifi();
+
+    // Separate properties for each dropdown
+    private string selectedWifiBrand1 = "";
+    private string selectedWifiBrand2 = "";
+
+    private IList<Wifi>? Wifis;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Wifis = await _client.GetFromJsonAsync<List<Wifi>>($"{Endpoints.WifisEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/Wifis/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedWifiBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedWifiBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedWifiBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedWifiBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedWifiBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedWifiBrand2);
+    }
+}

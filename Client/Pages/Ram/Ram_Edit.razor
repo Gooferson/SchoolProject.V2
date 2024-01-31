@@ -1,0 +1,24 @@
+﻿@page "/rams/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Ram</h3>
+
+<Rams_FormComponent ButtonText="Update" OnValidSubmit="EditGpu" ram = "ram"/>
+
+@code {
+    [Parameter] public int id { get; set; }
+    Ram ram= new Ram();
+
+    protected async override Task OnInitializedAsync()
+    {
+        ram = await _client.GetFromJsonAsync<Ram>($"{Endpoints.RamsEndpoint}/{id}");
+    }
+
+    async Task EditGpu()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.RamsEndpoint}/{id}", ram);
+        _navManager.NavigateTo("/rams/");
+    }
+
+}

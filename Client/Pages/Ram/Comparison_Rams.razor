@@ -1,0 +1,84 @@
+﻿@page "/rams/comparisons/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@inject IJSRuntime JS
+
+<h3>Select Rams</h3>
+<hr />
+<br />
+
+<EditForm Model="@ram" OnValidSubmit="SendData">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Ram 1: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedRamBrand1" class="form-control" @oninput="StoreSelection1">
+                <option value="">-- Select Make --</option>
+                @if (Rams != null)
+                {
+                    foreach (var ram in Rams)
+                    {
+                        <option value="@ram.RamBrand">@ram.RamBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => ram.Id)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Ram 2: </label>
+        <div>
+            <InputSelect @bind-Value="@selectedRamBrand2" class="form-control" @oninput="StoreSelection2">
+                <option value="">-- Select Make --</option>
+                @if (Rams != null)
+                {
+                    foreach (var ram in Rams)
+                    {
+                        <option value="@ram.RamBrand">@ram.RamBrand</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => ram.Id)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Confirm
+    </button>
+</EditForm>
+
+@code {
+    Ram ram = new Ram();
+
+    // Separate properties for each dropdown
+    private string selectedRamBrand1 = "";
+    private string selectedRamBrand2 = "";
+
+    private IList<Ram>? Rams;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Rams = await _client.GetFromJsonAsync<List<Ram>>($"{Endpoints.RamsEndpoint}");
+    }
+
+    private async Task SendData()
+    {
+        _navManager.NavigateTo("/Rams/comparisons/compared/");
+    }
+
+    private async Task StoreSelection1(ChangeEventArgs e)
+    {
+        selectedRamBrand1 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 1: " + selectedRamBrand1);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection1", selectedRamBrand1);
+    }
+
+    private async Task StoreSelection2(ChangeEventArgs e)
+    {
+        selectedRamBrand2 = e.Value?.ToString() ?? "";
+        Console.WriteLine("Storing Selection 2: " + selectedRamBrand2);
+        await JS.InvokeVoidAsync("localStorage.setItem", "StoredSelection2", selectedRamBrand2);
+    }
+}
