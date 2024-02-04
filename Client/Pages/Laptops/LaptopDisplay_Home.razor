@@ -39,10 +39,10 @@
             <th>Screen Name</th>
             <th>Wifi Name</th>
         </tr>
-        @foreach (var laptop in Laptops)
-        {
-            if (laptop.LaptopCategory == "Home")
+            @foreach (var laptop in Laptops)
             {
+                if (laptop.LaptopCategory == "Home")
+                {
                 <tr>
                     <th>@laptop.LaptopName</th>
                     <th>@laptop.LaptopCategory</th>
@@ -54,8 +54,8 @@
                     <th>@laptop.Screen.ScreenBrand</th>
                     <th>@laptop.Wifi.WifiName</th>
                 </tr>
+                }
             }
-        }
     </table>
 </div>
 

@@ -96,9 +96,9 @@
                         {
                             <th>@screen.LaptopName</th>
                         }
-                    }
-                }
-            }
+                        }
+                        }
+                        }
         </tr>
     </table>
 </div>
@@ -173,9 +173,9 @@
                                 else
                                 {
                                     Console.WriteLine("Test");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }   
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Gpu.GpuSpeed == StoredDataList.Skip(x).FirstOrDefault())
                             {
@@ -185,10 +185,10 @@
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Test2");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                Console.WriteLine("Test2");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Cpu.CpuCores == StoredDataList.Skip(x).FirstOrDefault())
                             {
@@ -198,10 +198,10 @@
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Test3");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                Console.WriteLine("Test3");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Ram.RamSpeed == StoredDataList.Skip(x).FirstOrDefault())
                             {
@@ -211,10 +211,10 @@
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Test4");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                Console.WriteLine("Test4");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Ram.RamAmount == StoredDataList.Skip(x).FirstOrDefault())
                             {
@@ -224,10 +224,10 @@
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Test5");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                Console.WriteLine("Test5");
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Screen.ScreenSize == StoredDataList.Skip(x).FirstOrDefault())
                             {
@@ -244,10 +244,10 @@
                             else
                             {
                                 break;
-                            }
                         }
                     }
                 }
+            }
             }
             else
             {
@@ -259,6 +259,7 @@
                         {
                             if (laptop.LaptopPrice == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
                             {
+                                Console.WriteLine("Test8");
                                 StoredTestList.Add(laptop.LaptopName);
                                 break;
                             }
@@ -271,9 +272,9 @@
                                 else
                                 {
                                     Console.WriteLine("Test6");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Gpu.GpuSpeed == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
                             {
@@ -284,9 +285,9 @@
                                 else
                                 {
                                     Console.WriteLine("Test7");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Cpu.CpuCores == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
                             {
@@ -297,9 +298,9 @@
                                 else
                                 {
                                     Console.WriteLine("Test8");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Ram.RamSpeed == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
                             {
@@ -310,9 +311,9 @@
                                 else
                                 {
                                     Console.WriteLine("Test9");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Ram.RamAmount == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
                             {
@@ -323,9 +324,9 @@
                                 else
                                 {
                                     Console.WriteLine("Test10");
-                                    StoredTestList.Add(laptop.LaptopName);
-                                    break;
-                                }
+                                StoredTestList.Add(laptop.LaptopName);
+                                break;
+                            }
                             }
                             else if (laptop.Screen.ScreenSize == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
                             {
@@ -349,4 +350,5 @@
             }
         }
     }
+
 }
