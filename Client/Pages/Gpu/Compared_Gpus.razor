@@ -75,6 +75,10 @@
                         {
                             <th>@screen.GpuVersion</th>
                         }
+                        if (gpu.GpuVram == StoredNameList.Skip(x).FirstOrDefault())
+                        {
+                            <th>@gpu.GpuVersion</th>
+                        }
                     }
                 }
             }
@@ -87,6 +91,7 @@
     private List<Gpu>? Gpus;
     private string StoredData1 = "";
     private string StoredData2 = "";
+    private List<int?> StoredNameList = new List<int?>();
     private List<int?> StoredDataList = new List<int?>();
     private List<string?> StoredSavedDataList = new List<string?>();
     private List<string?> StoredTestList = new List<string?>();

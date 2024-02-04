@@ -60,6 +60,7 @@
         Os = await _client.GetFromJsonAsync<List<OS>>($"{Endpoints.OSsEndpoint}");
         StoredData1 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection1");
         StoredData2 = await JS.InvokeAsync<string>("localStorage.getItem", "StoredSelection2");
+
     }
 
 }

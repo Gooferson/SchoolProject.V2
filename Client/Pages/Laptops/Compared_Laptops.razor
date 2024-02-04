@@ -96,17 +96,19 @@
                         {
                             <th>@screen.LaptopName</th>
                         }
-                    }
-                }
-            }
+                        }
+                        }
+                        }
         </tr>
     </table>
 </div>
 
 @code{
     private List<Laptop>? Laptops;
+
     private string StoredData1 = "";
     private string StoredData2 = "";
+    private List<int?> StoredNameList = new List<int?>();
     private List<int?> StoredDataList = new List<int?>();
     private List<string?> StoredSavedDataList = new List<string?>();
     private List<string?> StoredTestList = new List<string?>();

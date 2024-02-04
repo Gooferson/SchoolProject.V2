@@ -88,6 +88,7 @@
     private List<string?> StoredSavedDataList = new List<string?>();
     private List<string?> StoredTestList = new List<string?>();
 
+
     protected async override Task OnInitializedAsync()
     {
         Rams = await _client.GetFromJsonAsync<List<Ram>>($"{Endpoints.RamsEndpoint}");
@@ -102,7 +103,7 @@
             {
                 StoredDataList.Add(screen.RamSpeed);
                 StoredDataList.Add(screen.RamAmount);
-            }
+    }
 
             if (screen.RamBrand == StoredData2)
             {

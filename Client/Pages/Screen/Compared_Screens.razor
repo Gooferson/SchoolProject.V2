@@ -132,7 +132,7 @@
             if (StoredDataList.Skip(x).FirstOrDefault() == StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
             {
                 StoredTestList.Add(null);
-            }
+    }
             else if (StoredDataList.Skip(x).FirstOrDefault() > StoredDataList.Skip(x + (StoredDataList.Count / 2)).FirstOrDefault())
             {
                 foreach (var screen in Screens)
